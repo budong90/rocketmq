@@ -6,7 +6,11 @@
 
   <groupId>cc.eslink</groupId>
   <artifactId>rocketmq</artifactId>
+  <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
+  <modules>
+    <module>mqtest1</module>
+  </modules>
 
   <name>rocketmq</name>
   <!-- FIXME change it to the project's website -->
