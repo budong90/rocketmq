@@ -1,4 +1,4 @@
-package cc.eslink.consumer;
+package cc.eslink.consumer.delay;
 
 import cc.eslink.Constant;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
@@ -10,13 +10,13 @@ import org.apache.rocketmq.common.message.MessageExt;
 import java.util.List;
 
 /**
- *@ClassName Consumer
- *@Description 消息消费
+ *@ClassName ScheduledMessageConsumer
+ *@Description 延时消息
  *@Author zeng.yakun (0178)
- *@Date 2019/11/4 13:24
+ *@Date 2019/11/4 18:03
  *@Version 1.0
  **/
-public class Consumer {
+public class ScheduledMessageConsumer {
 
     public static void main(String[] args) throws Exception {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("group1");
@@ -24,13 +24,14 @@ public class Consumer {
         consumer.subscribe("TopicTest", "*");
         consumer.registerMessageListener(new MessageListenerConcurrently() {
             @Override
-            public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
-                System.out.printf("%s Receive New Messages: %s %n", Thread.currentThread().getName(), msgs);
-                // 标记该消息已经被成功消费
+            public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> messages, ConsumeConcurrentlyContext context) {
+                for (MessageExt message : messages) {
+                    // Print approximate delay time period
+                    System.out.println("Receive message[msgId=" + message.getMsgId() + "] " + (System.currentTimeMillis() - message.getStoreTimestamp()) + "ms later");
+                }
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
             }
         });
         consumer.start();
-        System.out.println("Consumer Started.%d");
     }
 }

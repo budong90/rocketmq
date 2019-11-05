@@ -1,5 +1,6 @@
 package cc.eslink.producer;
 
+import cc.eslink.Constant;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
@@ -18,7 +19,7 @@ public class AsyncProducer {
 
     public static void main(String[] args) throws Exception {
         DefaultMQProducer producer = new DefaultMQProducer("group1");
-        producer.setNamesrvAddr("localhost:9876");
+        producer.setNamesrvAddr(Constant.NAMESRV_ADDR);
         producer.start();
         producer.setRetryTimesWhenSendAsyncFailed(0);
         for (int i = 0; i < 100; i++) {
@@ -42,6 +43,7 @@ public class AsyncProducer {
                 }
             });
         }
-        producer.shutdown();
+        // todo 等所有消息发送成功后
+//        producer.shutdown();
     }
 }
